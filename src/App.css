@@ -1,5 +1,44 @@
+/*== FONT FACE===*/
+
+@font-face{
+  font-family: ReadexPro;
+  font-weight: 100;
+  src: url("../public/fonts/ReadexPro-ExtraLight.ttf");
+}
+
+@font-face{
+  font-family: ReadexPro;
+  font-weight: 200;
+  src: url("../public/fonts/ReadexPro-Light.ttf");
+}
+
+@font-face{
+  font-family: ReadexPro;
+  font-weight: 300;
+  src: url("../public/fonts/ReadexPro-Medium.ttf");
+}
+
+@font-face{
+  font-family: ReadexPro;
+  font-weight: normal;
+  src: url("../public/fonts/ReadexPro-Regular.ttf");
+}
+
+@font-face{
+  font-family: ReadexPro;
+  font-weight: 500;
+  src: url("../public/fonts/ReadexPro-Bold.ttf");
+}
+
+@font-face{
+  font-family: ReadexPro;
+  font-weight: 600;
+  src: url("../public/fonts/ReadexPro-SemiBold.ttf");
+}
+
 .App {
   text-align: center;
+  font-family: ReadexPro-Bold;
 }
 
 .App-logo {
@@ -36,3 +75,23 @@
     transform: rotate(360deg);
   }
 }
+
+.IconButton{
+  transition: all 0.2s !important;
+}
+
+.IconButton:hover {
+  background-color: #c5c5c5 !important;
+  box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.4)
+}
+
+.todoCard{
+  transition: all 0.2s !important;
+}
+
+.todoCard:hover {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-shadow: 0px 7px 7px rgba(0, 0, 0, 0.4)
+}
+
