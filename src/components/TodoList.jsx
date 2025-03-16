@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
@@ -11,36 +11,58 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Todo from "./Todo";
 import Grid from "@mui/material/Grid";
-import TextField from '@mui/material/TextField';
-import {v4 as uuidv4 } from "uuid"
+import TextField from "@mui/material/TextField";
+import { v4 as uuidv4 } from "uuid";
 
-const todos =[
-    {
-        id: uuidv4(),        
-        title:"title a",
-        details:"detailssfdsd ",
-        isCompleted:false
-    },
-    {
-        id: uuidv4(),         
-        title:"title n",
-        details:"detailsrer ",
-        isCompleted:false
-    },
-    {
-        id: uuidv4(),         
-        title:"titles",
-        details:"detailsdd",
-        isCompleted:false
-    }
-]
+const initalTodos = [
+  {
+    id: uuidv4(),
+    title: "title a",
+    details: "detailssfdsd ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "title n",
+    details: "detailsrer ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "titles",
+    details: "detailsdd",
+    isCompleted: false,
+  },
+];
 
 export default function TodoList() {
-    const todosJsx = todos.map((t)=>{
-        return (
-            <Todo key={t.id} title={t.title} details={t.details} />
-        )
+  const [todos, setTodos] = useState(initalTodos);
+  const [titleInput, setTitleInput] = useState("");
+
+  function handleCheckClick(todoId){
+    const updatedTodos = todos.map((t)=>{
+      if(t.id == todoId){
+        t.isCompleted = !t.isCompleted       
+      }
+      return t;     
     })
+    setTodos(updatedTodos);    
+  }
+
+  const todosJsx = todos.map((t) => {
+    return <Todo key={t.id} todo={t} handleCheck={handleCheckClick} />;
+  });
+
+  function handleAddClick() {
+    const newTodo = {
+      id: uuidv4(),
+      title: titleInput,
+      details: "",
+      isCompleted: false,
+    };
+    setTodos([...todos, newTodo]);
+    setTitleInput("")
+  }
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
@@ -61,17 +83,27 @@ export default function TodoList() {
           </ToggleButtonGroup>
           {todosJsx}
           {/*==== INPUT + ADD =====*/}
-          <Grid container style={{marginTop:"20px"}} spacing={2}>
+          <Grid container style={{ marginTop: "20px" }} spacing={2}>
             <Grid item xs={8}>
-            <TextField id="outlined-basic" label="عنوان المهمة" variant="outlined" style={{width:"100%"}} />
-
+              <TextField
+                id="outlined-basic"
+                label="عنوان المهمة"
+                variant="outlined"
+                style={{ width: "100%" }}
+                value={titleInput}
+                onChange={(e)=> setTitleInput(e.target.value)}
+              />
             </Grid>
-            <Grid
-              container
-              item
-              xs={4}              
-            >
-                      <Button variant="contained" style={{width:"100%", height:"100%"}}>إضافة</Button>
+            <Grid container item xs={4}>
+              <Button
+                variant="contained"
+                style={{ width: "100%", height: "100%" }}
+                onClick={() => {
+                  handleAddClick();
+                }}
+              >
+                إضافة
+              </Button>
             </Grid>
           </Grid>
         </CardContent>
