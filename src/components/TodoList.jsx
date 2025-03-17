@@ -14,25 +14,46 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { TodosContext } from "../contexts/TodosContext";
 import { v4 as uuidv4 } from "uuid";
-
-
+import rtlPlugin from 'stylis-plugin-rtl';
+import { prefixer } from 'stylis';
+import createCache from '@emotion/cache';
 
 export default function TodoList() {
-
-  const {todos,setTodos} = useContext(TodosContext)
+  const { todos, setTodos } = useContext(TodosContext);
 
   const [titleInput, setTitleInput] = useState("");
+  const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
- 
-
-  const todosJsx = todos.map((t) => {
-    return <Todo key={t.id} todo={t}  />;
+  const completedTodos = todos.filter((t) => {
+    return t.isCompleted;
   });
 
-  useEffect(()=>{
-    const storageTodos =JSON.parse(localStorage.getItem("todos"));
-    setTodos(storageTodos)
-  },[]);
+  const nonCompletedTodos = todos.filter((t) => {
+    return !t.isCompleted;
+  });
+
+  let todosToBeRendered = todos;
+
+  if (displayedTodosType == "completed") {
+    todosToBeRendered = completedTodos;
+  } else if (displayedTodosType == "not-completed") {
+    todosToBeRendered = nonCompletedTodos;
+  } else {
+    todosToBeRendered = todos;
+  }
+
+  const todosJsx = todosToBeRendered.map((t) => {
+    return <Todo key={t.id} todo={t} />;
+  });
+
+  function changeDisplayedType(e) {
+    setDisplayedTodosType(e.target.value);
+  }
+
+  useEffect(() => {
+    const storageTodos = JSON.parse(localStorage.getItem("todos"));
+    setTodos(storageTodos);
+  }, []);
 
   function handleAddClick() {
     const newTodo = {
@@ -40,16 +61,22 @@ export default function TodoList() {
       title: titleInput,
       details: "",
       isCompleted: false,
-    };    
-    const updatedTodos = [...todos, newTodo]
+    };
+    const updatedTodos = [...todos, newTodo];
     setTodos(updatedTodos);
-    localStorage.setItem("todos",JSON.stringify(updatedTodos))
-    setTitleInput("")
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    setTitleInput("");
   }
-  
+
+  const cacheRtl = createCache({
+    key: 'muirtl',
+    stylisPlugins: [prefixer, rtlPlugin],
+  });
+
   return (
+    <div dir="rtl">
     <Container maxWidth="sm">
-      <Card sx={{ minWidth: 275 }}>
+      <Card sx={{ minWidth: 275 }} style={{maxHeight: "80vh", overflow:"scroll"}}>
         <CardContent>
           <Typography gutterBottom variant="h1" style={{ fontWeight: "bold" }}>
             مهامي
@@ -60,23 +87,27 @@ export default function TodoList() {
             exclusive
             aria-label="Platform"
             style={{ marginTop: "30px" }}
+            value={displayedTodosType}
+            onChange={changeDisplayedType}
           >
-            <ToggleButton value="web">الكل</ToggleButton>
-            <ToggleButton value="android">منجز</ToggleButton>
-            <ToggleButton value="ios">غير منجز</ToggleButton>
+            <ToggleButton value="all">الكل</ToggleButton>
+            <ToggleButton value="completed">منجز</ToggleButton>
+            <ToggleButton value="not-completed">غير منجز</ToggleButton>
           </ToggleButtonGroup>
           {todosJsx}
           {/*==== INPUT + ADD =====*/}
           <Grid container style={{ marginTop: "20px" }} spacing={2}>
             <Grid item xs={8}>
+            <div dir="rtl">
               <TextField
                 id="outlined-basic"
                 label="عنوان المهمة"
                 variant="outlined"
-                style={{ width: "100%" }}
+                style={{ width: "100%",textAlign:"right"}}
                 value={titleInput}
-                onChange={(e)=> setTitleInput(e.target.value)}
+                onChange={(e) => setTitleInput(e.target.value)}                
               />
+              </div>
             </Grid>
             <Grid container item xs={4}>
               <Button
@@ -85,6 +116,7 @@ export default function TodoList() {
                 onClick={() => {
                   handleAddClick();
                 }}
+                disabled={titleInput.length == 0}
               >
                 إضافة
               </Button>
@@ -93,5 +125,6 @@ export default function TodoList() {
         </CardContent>
       </Card>
     </Container>
+    </div>
   );
 }

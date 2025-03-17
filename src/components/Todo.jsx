@@ -72,7 +72,8 @@ export default function Todo({ todo }) {
     <>
     {/*========= DELETE DIALOG =========*/}
     <Dialog
-    style={{direction:"rtl", textAlign:"right"}}
+     dir="rtl"
+    style={{ textAlign:"right"}}
     open={showDeleteDialog}
     onClose={handleDeleteClose}
     aria-labelledby="alert-dialog-title"
@@ -96,7 +97,8 @@ export default function Todo({ todo }) {
     {/*========= DELETE DIALOG =========*/}
     {/*========= EDIT DIALOG =========*/}
     <Dialog
-    style={{direction:"rtl",textAlign:"right"}}
+     dir="rtl"
+    style={{textAlign:"right"}}
     open={showEditDialog}
     onClose={handleEditClose}
     aria-labelledby="alert-dialog-title"
@@ -115,6 +117,7 @@ export default function Todo({ todo }) {
             label="عنوان المهمة"
             fullWidth
             variant="standard"
+            style={{textAlign:"right"}}
             value={updateTodo.title}
             onChange={(e)=>{
               setUpdateTodo({...updateTodo,title: e.target.value})
@@ -126,7 +129,7 @@ export default function Todo({ todo }) {
             name="TodoDetails"
             label="تفاصيل المهمة"
             fullWidth
-            variant="standard"
+            variant="standard"            
             value={updateTodo.details}
             onChange={(e)=>{
               setUpdateTodo({...updateTodo,details: e.target.value})
@@ -149,15 +152,16 @@ export default function Todo({ todo }) {
         background: "#283593",
         color: "white",
         marginTop: 5,
+        textAlign:"left"
       }}
     >
       <CardContent>
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            <Typography variant="h5" sx={{ textAlign: "right" }}>
+            <Typography variant="h5" sx={{ textAlign: "left" ,textDecoration: todo.isCompleted ? "line-through":"none" }}>
               {todo.title}
             </Typography>
-            <Typography variant="h6" sx={{ textAlign: "right" }}>
+            <Typography variant="h6" sx={{ textAlign: "left" }}>
               {todo.details}
             </Typography>
           </Grid>
