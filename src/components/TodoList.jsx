@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
@@ -29,16 +29,24 @@ export default function TodoList() {
     return <Todo key={t.id} todo={t}  />;
   });
 
+  useEffect(()=>{
+    const storageTodos =JSON.parse(localStorage.getItem("todos"));
+    setTodos(storageTodos)
+  },[]);
+
   function handleAddClick() {
     const newTodo = {
       id: uuidv4(),
       title: titleInput,
       details: "",
       isCompleted: false,
-    };
-    setTodos([...todos, newTodo]);
+    };    
+    const updatedTodos = [...todos, newTodo]
+    setTodos(updatedTodos);
+    localStorage.setItem("todos",JSON.stringify(updatedTodos))
     setTitleInput("")
   }
+  
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
