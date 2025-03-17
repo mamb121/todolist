@@ -1,9 +1,34 @@
 import "./App.css";
 import TodoList from "./components/TodoList";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import { Typography } from "@mui/material/Typography";
+import { TodosContext } from "./contexts/TodosContext";
+import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
+
+const initalTodos = [
+  {
+    id: uuidv4(),
+    title: "title a",
+    details: "detailssfdsd ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "title n",
+    details: "detailsrer ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "titles",
+    details: "detailsdd",
+    isCompleted: false,
+  },
+];
 
 function App() {
+    const [todos, setTodos] = useState(initalTodos);
+  
   const theme = createTheme({
     typography: {
       fontFamily: ["ReadexPro"],
@@ -11,6 +36,7 @@ function App() {
   });
 
   return (
+    
     <ThemeProvider theme={theme}>
       <div
         className="App"
@@ -23,7 +49,9 @@ function App() {
           backgroundColor: "#191b1f",
         }}
       >
-        <TodoList />
+        <TodosContext.Provider value ={{todos,setTodos}}>
+            <TodoList />
+          </TodosContext.Provider>
       </div>
     </ThemeProvider>
   );
